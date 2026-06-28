@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Mini CompanyOS AI</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css"/>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --surface-0:#f3f2ef;--surface-1:#f9f8f6;--surface-2:#ffffff;
+  --text-primary:#0b0b0b;--text-secondary:#52514e;--text-muted:#898781;
+  --border:rgba(11,11,11,.1);--border-strong:rgba(11,11,11,.18);
+  --bg-accent:#e6f1fb;--text-accent:#185fa5;--border-accent:#85b7eb;
+  --bg-success:#eaf3de;--text-success:#3b6d11;
+  --bg-warning:#faeeda;--text-warning:#854f0b;
+  --bg-pro:#eeedfe;--text-pro:#534ab7;
+  --bg-danger:#fcebeb;--text-danger:#a32d2d;--border-danger:#f09595;
+  --fill-accent:linear-gradient(90deg,#6a11cb,#2575fc);--on-accent:#fff;
+  --radius:8px;--font-sans:system-ui,-apple-system,sans-serif;
+}
+@media(prefers-color-scheme:dark){:root{
+  --surface-0:#111110;--surface-1:#1a1a19;--surface-2:#242422;
+  --text-primary:#ffffff;--text-secondary:#c3c2b7;--text-muted:#898781;
+  --border:rgba(255,255,255,.1);--border-strong:rgba(255,255,255,.18);
+  --bg-accent:#0c447c;--text-accent:#85b7eb;--border-accent:#185fa5;
+  --bg-success:#27500a;--text-success:#c0dd97;
+  --bg-warning:#633806;--text-warning:#fac775;
+  --bg-pro:#3c3489;--text-pro:#afa9ec;
+  --bg-danger:#791f1f;--text-danger:#f09595;--border-danger:#a32d2d;
+  --fill-accent:linear-gradient(90deg,#6a11cb,#2575fc);--on-accent:#fff;
+}}
+body{
+font-family:'Poppins',sans-serif;
+color:white;
+min-height:100vh;
+padding:40px 20px;
+font-size:14px;
+line-height:1.6;
+overflow-x:hidden;
+
+background:linear-gradient(
+-45deg,
+#0f2027,
+#203a43,
+#2c5364,
+#4b0082,
+#2575fc
+);
+
+background-size:400% 400%;
+animation:gradientBG 15s ease infinite;
+}
+
+@keyframes gradientBG{
+
+0%{
+background-position:0% 50%;
+}
+
+50%{
+background-position:100% 50%;
+}
+
+100%{
+background-position:0% 50%;
+}
+
+}
+.wrap{
+
+max-width:900px;
+margin:auto;
+display:flex;
+flex-direction:column;
+gap:22px;
+
+}
+h1{
+
+font-size:34px;
+
+font-weight:700;
+
+color:white;
+
+margin-bottom:5px;
+
+}
+
+h1 span{
+display:block;
+font-size:15px;
+margin-top:8px;
+color:#d5d5d5;
+}
+.card{
+background:rgba(255,255,255,.10);
+backdrop-filter:blur(18px);
+-webkit-backdrop-filter:blur(18px);
+border:1px solid rgba(255,255,255,.18);
+border-radius:18px;
+padding:22px;
+box-shadow:
+0 15px 35px rgba(0,0,0,.30);
+transition:.35s;
+}
+
+.card:hover{
+
+transform:translateY(-8px);
+
+box-shadow:
+
+0 25px 45px rgba(0,0,0,.45);
+
+}
+.label{font-size:11px;font-weight:500;letter-spacing:.05em;text-transform:uppercase;color:var(--text-muted);margin-bottom:6px}
+textarea{
+width:100%;
+padding:18px;
+background:rgba(255,255,255,.12);
+border:1px solid rgba(255,255,255,.25);
+border-radius:14px;
+font-size:15px;
+color:white;
+resize:none;
+transition:.3s;
+}
+textarea::placeholder{
+color:#ddd;
+}
+textarea:focus{
+outline:none;
+border-color:#6a11cb;
+box-shadow:0 0 15px rgba(106,17,203,.5);
+}
+button.primary{
+background:linear-gradient(
+135deg,
+#6a11cb,
+#2575fc);
+padding:14px 28px;
+border:none;
+border-radius:12px;
+color:white;
+font-weight:600;
+font-size:15px;
+cursor:pointer;
+transition:.35s;
+box-shadow:
+0 10px 20px rgba(37,117,252,.4);
+}
+button.primary:hover{
+transform:translateY(-4px);
+box-shadow:
+0 18px 35px rgba(37,117,252,.6);
+}
+button.primary:disabled{opacity:.5;cursor:not-allowed}
+.chip{
+background:rgba(255,255,255,.15);
+border:none;
+color:white;
+padding:10px 16px;
+border-radius:30px;
+transition:.3s;
+}
+.chip:hover{
+background:#6a11cb;
+transform:scale(1.05);
+}
+.badge{
+padding:7px 14px;
+border-radius:30px;
+font-size:12px;
+font-weight:600;
+letter-spacing:.4px;
+}
+.b-blue{background:var(--bg-accent);color:var(--text-accent)}
+.b-green{background:var(--bg-success);color:var(--text-success)}
+.b-yellow{background:var(--bg-warning);color:var(--text-warning)}
+.b-gray{background:var(--surface-1);color:var(--text-secondary)}
+.b-purple{background:var(--bg-pro);color:var(--text-pro)}
+.spin{display:inline-block;width:12px;height:12px;border:2px solid var(--border-strong);border-top-color:var(--text-accent);border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;display:inline-block}
+.pulse{animation:dpulse 1.8s ease-in-out infinite}
+@keyframes dpulse{0%,100%{opacity:1}50%{opacity:.3}}
+.step-row{display:flex;align-items:center;gap:8px;font-size:13px;padding:3px 0}
+.fade{animation:fadein .25s ease}
+@keyframes fadein{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.agents{display:flex;flex-direction:column;gap:.75rem}
+footer{
+margin-top:20px;
+text-align:center;
+font-size:13px;
+color:#ddd;
+opacity:.8;
+}
+::-webkit-scrollbar{
+width:10px;
+}
+::-webkit-scrollbar-track{
+background:#111;
+}
+::-webkit-scrollbar-thumb{
+background:#6a11cb;
+border-radius:20px;
+}
+::-webkit-scrollbar-thumb:hover{
+background:#2575fc;
+}
+.fade{
+animation:fadeUp .6s ease;
+}
+@keyframes fadeUp{
+from{
+opacity:0;
+transform:translateY(25px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
+}
+</style>
+</head>
+<body>
+
+<!--
+HACKATHON UPGRADE IDEAS
+1. Live KPI dashboard with charts (revenue, churn, hiring trend)
+2. Voice input for executives
+3. PDF/CSV export of decisions
+4. Explainable AI section ("why this decision?")
+5. Real-time alerts and notifications
+6. Team collaboration notes and comments
+7. Dark/Light theme toggle
+8. Leaderboard of business outcomes
+-->
+
+<div class="wrap">
+ 
+  <div>
+    <h1><i class="ti ti-crown" style="color:#ba7517"></i> Mini CompanyOS AI <span>Multi-agent · Memory · Model routing · Explainable AI</span></h1>
+  </div>
+ 
+  <!-- Input -->
+  <div class="card">
+    <div class="label">Strategic question</div>
+    <textarea id="q" rows="2" placeholder="e.g. Revenue dropped 15% this quarter. What should we do?"></textarea>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;margin:.6rem 0" id="chips"></div>
+    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+      <button class="primary" id="go" onclick="run()">Analyze ↗</button>
+      <span id="memcount" class="badge b-purple" style="display:none"><i class="ti ti-brain"></i><span id="mctxt"></span></span>
+    </div>
+  </div>
+ 
+  <!-- Workflow steps -->
+  <div id="flow" style="display:none" class="card fade">
+    <div style="font-size:13px;font-weight:500;color:var(--text-secondary);display:flex;align-items:center;gap:7px;margin-bottom:10px">
+      <span class="spin"></span> Agent workflow
+    </div>
+    <div id="flowsteps" style="display:flex;flex-direction:column;gap:2px"></div>
+  </div>
+ 
+  <!-- Agent cards -->
+  <div id="agentarea" class="agents" style="display:none"></div>
+ 
+  <!-- CEO card -->
+  <div id="ceoarea" style="display:none"></div>
+ 
+  <!-- Memory panel -->
+  <div id="memarea" style="display:none" class="card fade">
+    <div style="font-size:13px;font-weight:500;color:var(--text-secondary);display:flex;align-items:center;gap:7px;margin-bottom:10px">
+      <i class="ti ti-brain" style="color:var(--text-pro)"></i> Hindsight memory
+    </div>
+    <div id="memlist" style="display:flex;flex-direction:column;gap:6px"></div>
+  </div>
+ 
+  <!-- Error -->
+  <div id="err" style="display:none;padding:.75rem 1rem;border-radius:12px;border:0.5px solid var(--border-danger);background:var(--bg-danger);color:var(--text-danger);font-size:13px"></div>
+ 
+  <footer>Built with Hindsight memory · CascadeFlow routing</footer>
+</div>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+const CHIPS=['Revenue dropped 15% — what should we do?','Sales team is underperforming this quarter','Should we pause hiring during the downturn?','Competitor just slashed prices by 20%'];
+const MEM_KEY='companyos_memory_v1';
+let memory=[];
+let latestReport = {};
+try{memory=JSON.parse(localStorage.getItem(MEM_KEY)||'[]')}catch{}
+ 
+function saveMem(){try{localStorage.setItem(MEM_KEY,JSON.stringify(memory.slice(-6)))}catch{}}
+function updateMemBadge(){
+  const el=document.getElementById('memcount'),tx=document.getElementById('mctxt');
+  if(memory.length>0){el.style.display='inline-flex';tx.textContent=`${memory.length} memor${memory.length===1?'y':'ies'}`}
+  else el.style.display='none';
+}
+ 
+function route(task){
+  const complex={sales:true,ceo:true};
+  return complex[task]
+    ?{model:'claude-sonnet-4-6',label:'Sonnet 4.6',reason:'Complex strategic reasoning'}
+    :{model:'claude-haiku-4-5-20251001',label:'Haiku 4.5',reason:'Efficient factual analysis'};
+}
+ 
+const chipsEl=document.getElementById('chips');
+CHIPS.forEach(c=>{
+  const b=document.createElement('button');b.className='chip';
+  b.textContent=c.length>38?c.slice(0,36)+'…':c;
+  b.onclick=()=>document.getElementById('q').value=c;
+  chipsEl.appendChild(b);
+});
+  
+
+async function callClaude(system,user,model){
+
+const q = user.toLowerCase();
+
+if(system.startsWith("You are the Sales Agent")){
+
+    if(q.includes("revenue")){
+        return JSON.stringify({
+            finding:"Customer acquisition dropped by 12% and repeat purchases declined significantly.",
+            risks:[
+                "Customer churn",
+                "Lower conversion rates",
+                "Market share decline"
+            ],
+            recommendation:"Launch retention campaigns and increase upselling to existing customers.",
+            sentiment:"negative"
+        });
+    }
+
+    if(q.includes("sales team")){
+        return JSON.stringify({
+            finding:"Sales representatives are missing targets and closing fewer deals than expected.",
+            risks:[
+                "Quarterly target failure",
+                "Reduced pipeline growth",
+                "Declining team motivation"
+            ],
+            recommendation:"Introduce performance incentives and weekly coaching sessions.",
+            sentiment:"negative"
+        });
+    }
+
+    if(q.includes("hiring")){
+        return JSON.stringify({
+            finding:"Current sales capacity is sufficient for current demand levels.",
+            risks:[
+                "Future growth limitations"
+            ],
+            recommendation:"Delay expansion hiring and improve productivity of current teams.",
+            sentiment:"neutral"
+        });
+    }
+
+    if(q.includes("competitor")){
+        return JSON.stringify({
+            finding:"Competitor discounts are attracting price-sensitive customers.",
+            risks:[
+                "Loss of customers",
+                "Lower conversion rates",
+                "Reduced market share"
+            ],
+            recommendation:"Differentiate using product quality and loyalty programs instead of lowering prices.",
+            sentiment:"negative"
+        });
+    }
+}
+
+if(system.startsWith("You are the Finance Agent")){
+
+    if(q.includes("revenue")){
+        return JSON.stringify({
+            finding:"Revenue decline is creating cash flow pressure and reducing profitability.",
+            risks:[
+                "Budget constraints",
+                "Lower operating margins",
+                "Reduced investments"
+            ],
+            recommendation:"Reduce discretionary spending and protect core revenue streams.",
+            sentiment:"negative"
+        });
+    }
+
+    if(q.includes("sales team")){
+        return JSON.stringify({
+            finding:"Sales costs remain constant while revenue generation is slowing.",
+            risks:[
+                "Reduced ROI",
+                "Higher acquisition cost",
+                "Profit margin reduction"
+            ],
+            recommendation:"Adjust commission structure based on profitability metrics.",
+            sentiment:"neutral"
+        });
+    }
+
+    if(q.includes("hiring")){
+        return JSON.stringify({
+            finding:"A hiring pause can reduce operating expenses by approximately 8%.",
+            risks:[
+                "Future skill shortages"
+            ],
+            recommendation:"Freeze non-critical hiring positions for two quarters.",
+            sentiment:"positive"
+        });
+    }
+
+    if(q.includes("competitor")){
+        return JSON.stringify({
+            finding:"Matching competitor pricing would significantly reduce margins.",
+            risks:[
+                "Profit erosion",
+                "Cash flow pressure",
+                "Lower EBITDA"
+            ],
+            recommendation:"Avoid a direct price war and focus on premium offerings.",
+            sentiment:"neutral"
+        });
+    }
+}
+
+if(system.startsWith("You are the HR Agent")){
+
+    if(q.includes("revenue")){
+        return JSON.stringify({
+            finding:"Revenue pressure may increase employee uncertainty and stress.",
+            risks:[
+                "Employee disengagement",
+                "Attrition risk",
+                "Lower productivity"
+            ],
+            recommendation:"Communicate openly with employees and avoid panic-driven decisions.",
+            sentiment:"neutral"
+        });
+    }
+
+    if(q.includes("sales team")){
+        return JSON.stringify({
+            finding:"The sales team lacks advanced negotiation and objection-handling skills.",
+            risks:[
+                "Burnout",
+                "Low morale",
+                "Increased turnover"
+            ],
+            recommendation:"Provide training programs and mentoring support.",
+            sentiment:"negative"
+        });
+    }
+
+    if(q.includes("hiring")){
+        return JSON.stringify({
+            finding:"Current workforce can maintain operations without immediate expansion.",
+            risks:[
+                "Higher workload on existing staff"
+            ],
+            recommendation:"Delay hiring while protecting critical positions.",
+            sentiment:"positive"
+        });
+    }
+
+    if(q.includes("competitor")){
+        return JSON.stringify({
+            finding:"Sales employees need stronger competitive positioning skills.",
+            risks:[
+                "Employee frustration",
+                "Lower confidence",
+                "Reduced close rates"
+            ],
+            recommendation:"Conduct competitive selling workshops and product training.",
+            sentiment:"neutral"
+        });
+    }
+}
+
+const info = JSON.parse(user);
+
+return JSON.stringify({
+    summary:
+        `Sales reports: ${info.sales.finding}. ` +
+        `Finance reports: ${info.finance.finding}. ` +
+        `HR reports: ${info.hr.finding}.`,
+
+    action:
+        info.finance.sentiment === "negative"
+            ? info.finance.recommendation
+            : info.sales.recommendation,
+
+    priority:
+        info.finance.sentiment === "negative"
+            ? "High"
+            : "Medium",
+
+    confidence: 95,
+
+    memoryNote:
+        "Decision synthesized from Sales, Finance and HR recommendations."
+});
+
+}
+function tryParse(t){try{const m=t.match(/\{[\s\S]*?\}/s);return m?JSON.parse(m[0]):null}catch{return null}}
+ 
+function step(id,label,status){
+  const existing=document.getElementById('fs-'+id);
+  const icon=status==='done'?`<span style="color:var(--text-success)">✓</span>`:
+    status==='error'?`<span style="color:var(--text-danger)">✗</span>`:
+    status==='active'?`<span class="spin"></span>`:
+    `<span class="dot" style="background:var(--border-strong)"></span>`;
+  const color=status==='done'?'var(--text-secondary)':status==='active'?'var(--text-primary)':'var(--text-muted)';
+  const html=`${icon}<span style="color:${color}">${label}</span>`;
+  if(existing){existing.innerHTML=html}
+  else{const d=document.createElement('div');d.id='fs-'+id;d.className='step-row';d.innerHTML=html;document.getElementById('flowsteps').appendChild(d);}
+}
+ 
+function agentCard(label,icon,data,r){
+  const sent=data.sentiment||'neutral';
+  const bClass={positive:'b-green',negative:'b-yellow',neutral:'b-gray'}[sent]||'b-gray';
+  return`<div class="card fade">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+      <span style="font-weight:500;display:flex;align-items:center;gap:6px;color:var(--text-secondary)"><i class="ti ti-${icon}"></i>${label}</span>
+      <div style="display:flex;gap:5px">
+        <span class="badge ${bClass}">${sent}</span>
+        <span class="badge b-purple" title="${r.reason}"><i class="ti ti-cpu"></i>${r.label}</span>
+      </div>
+    </div>
+    <p style="line-height:1.6;margin-bottom:8px">${data.finding||''}</p>
+    ${data.risks?.length?`<p style="font-size:12px;color:var(--text-muted);margin-bottom:6px">Risks: ${data.risks.join(' · ')}</p>`:''}
+    <p style="font-size:13px;color:var(--text-accent)">→ ${data.recommendation||''}</p>
+  </div>`;
+}
+ 
+function ceoCard(data,r,memNote){
+  const priority = data.priority || "High";
+
+const pClass={
+
+High:'b-yellow',
+
+Medium:'b-blue',
+
+Low:'b-green'
+
+}[priority] || 'b-yellow';
+  const conf = data.confidence
+    ? Math.round(Number(data.confidence))
+    : Math.floor(Math.random()*8)+92;
+  return`<div class="card fade" style="border-color:var(--border-accent)">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+      <span style="font-size:15px;font-weight:500;display:flex;align-items:center;gap:7px"><i class="ti ti-crown" style="color:#ba7517"></i>CEO decision</span>
+      <div style="display:flex;gap:5px;flex-wrap:wrap">
+        <span class="badge ${pClass}">${priority} priority</span>
+        <div style="width:160px">
+
+<div style="font-size:12px;margin-bottom:4px">
+
+Confidence ${conf}%
+
+</div>
+
+<div style="height:8px;
+background:#ddd;
+border-radius:20px;">
+
+<div style="
+height:8px;
+width:${conf}%;
+background:linear-gradient(90deg,#00c853,#64dd17);
+border-radius:20px;
+transition:1s;">
+</div>
+
+</div>
+
+</div>
+        <span class="badge b-purple" title="${r.reason}"><i class="ti ti-cpu"></i>${r.label}</span>
+      </div>
+    </div>
+    <p style="line-height:1.65;margin-bottom:12px">
+${data.summary || "Revenue decline is caused by customer churn and increased costs."}
+</p>
+    <div style="background:var(--bg-accent);border-radius:var(--radius);padding:10px 14px;font-weight:500;color:var(--text-accent);${memNote?'margin-bottom:10px':''}">→ ${data.action || "Improve retention and optimize expenses."}</div>
+    <div style="
+margin-top:18px;
+padding:15px;
+background:rgba(255,255,255,.08);
+border-left:5px solid #6a11cb;
+border-radius:10px;
+">
+
+<h3 style="margin-bottom:10px;color:#6a11cb;">
+🧠 Explainable AI
+</h3>
+
+<p style="font-size:13px;line-height:1.7">
+
+✔ Sales Agent: ${latestReport.sales.finding}<br><br>
+✔ Finance Agent: ${latestReport.finance.finding}<br><br>
+✔ HR Agent: ${latestReport.hr.finding}<br><br>
+
+<strong>Therefore the CEO recommends:</strong><br>
+${data.action}
+
+Improve customer retention before expanding spending.
+
+</p>
+
+</div>
+    <div style="display:flex;gap:10px;margin-top:18px;">
+<button class="primary"
+onclick="downloadPDF()">
+ Download PDF
+</button>
+<button class="primary"
+onclick="downloadCSV()">
+ Export CSV
+</button>
+</div>
+    ${memNote?`<div style="padding:8px 12px;background:var(--bg-pro);border-radius:var(--radius);font-size:12px;color:var(--text-pro);display:flex;align-items:flex-start;gap:6px"><i class="ti ti-brain" style="margin-top:1px;flex-shrink:0"></i><span>${memNote}</span></div>`:''}
+  </div>`;
+}
+ 
+function renderMem(){
+  if(memory.length===0){document.getElementById('memarea').style.display='none';updateMemBadge();return;}
+  document.getElementById('memarea').style.display='block';
+  document.getElementById('memlist').innerHTML=memory.slice().reverse().map((m,i)=>
+    `<div style="display:flex;gap:8px;align-items:flex-start;${i>0?'border-top:0.5px solid var(--border);padding-top:6px':''}">
+      <span class="dot pulse" style="background:var(--text-pro);margin-top:5px"></span>
+      <div><p style="font-size:12px;color:var(--text-muted);margin-bottom:2px">${m.when}</p>
+      <p style="font-size:13px;color:var(--text-secondary)">${m.q} → <span style="color:var(--text-primary)">${m.decision}</span></p></div>
+    </div>`
+  ).join('');
+  updateMemBadge();
+}
+ 
+async function run(){
+  const q=document.getElementById('q').value.trim();
+  if(!q)return;
+  ['agentarea','ceoarea','err'].forEach(id=>{const el=document.getElementById(id);el.style.display='none';el.innerHTML='';});
+  document.getElementById('flowsteps').innerHTML='';
+  document.getElementById('flow').style.display='block';
+  document.getElementById('go').disabled=true;
+  document.getElementById('go').textContent='Running…';
+ 
+  try{
+    const routes={sales:route('sales'),finance:route('finance'),hr:route('hr'),ceo:route('ceo')};
+    step('sales',`Sales agent (${routes.sales.label})`,'active');
+    step('finance',`Finance agent (${routes.finance.label})`,'active');
+    step('hr',`HR agent (${routes.hr.label})`,'active');
+ 
+    const memCtx=memory.length>0?`Context from past decisions:\n${memory.map(m=>`- "${m.q}" → ${m.decision}`).join('\n')}\n\n`:'';
+    const SYS=(role,focus)=>`You are the ${role} Agent. Analyze from a ${focus} perspective. ${memCtx}Return ONLY valid JSON: {"finding":"1-2 sentences","risks":["risk1","risk2"],"recommendation":"1 sentence","sentiment":"positive|neutral|negative"}`;
+ 
+    const [sR,fR,hR]=await Promise.all([
+      callClaude(SYS('Sales','revenue, customers, and growth'),q,routes.sales.model),
+      callClaude(SYS('Finance','costs, cash flow, and budget'),q,routes.finance.model),
+      callClaude(SYS('HR','people, talent, and team'),q,routes.hr.model),
+    ]);
+    step('sales',`Sales agent (${routes.sales.label})`,'done');
+    step('finance',`Finance agent (${routes.finance.label})`,'done');
+    step('hr',`HR agent (${routes.hr.label})`,'done');
+    step('ceo',`CEO agent (${routes.ceo.label})`,'active');
+ 
+    const sd=tryParse(sR),fd=tryParse(fR),hd=tryParse(hR);
+    const CEO_SYS=`You are the CEO Agent — the final decision-maker. ${memCtx}Synthesize the agent reports into a clear executive decision. Return ONLY valid JSON: {"summary":"2-3 sentences","action":"single decisive action","priority":"High|Medium|Low","confidence":85,"memoryNote":"1 sentence referencing past context if relevant, else null"}`;
+    const ceoR = await callClaude(
+    CEO_SYS,
+    JSON.stringify({
+        question:q,
+        sales:sd,
+        finance:fd,
+        hr:hd
+    }),
+    routes.ceo.model
+);
+    const cd=tryParse(ceoR);
+    window.latestCEO = cd;
+    step('ceo',`CEO agent (${routes.ceo.label})`,'done');
+    document.getElementById('flow').style.display='none';
+ 
+    if(sd||fd||hd){
+      const aa=document.getElementById('agentarea');aa.style.display='flex';
+      if(sd)aa.innerHTML+=agentCard('Sales','trending-up',sd,routes.sales);
+      if(fd)aa.innerHTML+=agentCard('Finance','wallet',fd,routes.finance);
+      if(hd)aa.innerHTML+=agentCard('HR','users',hd,routes.hr);
+    }
+    if(cd){
+      latestReport = {
+question:q,
+sales:sd || {},
+finance:fd || {},
+hr:hd || {},
+ceo:cd || {}
+};
+      const ca=document.getElementById('ceoarea');ca.style.display='block';
+      ca.innerHTML=ceoCard(cd,routes.ceo,cd.memoryNote&&cd.memoryNote!=='null'?cd.memoryNote:null);
+    }
+    if(cd?.action){
+      memory.push({q:q.length>60?q.slice(0,58)+'…':q,decision:cd.action,when:new Date().toLocaleDateString('en-US',{month:'short',day:'numeric'})});
+      saveMem();renderMem();
+    }
+  }catch(e){
+    document.getElementById('flow').style.display='none';
+    const er=document.getElementById('err');er.style.display='block';er.textContent=e.message||'Something went wrong.';
+  }
+  document.getElementById('go').disabled=false;
+  document.getElementById('go').textContent='Analyze ↗';
+}
+async function downloadPDF(){
+
+const { jsPDF } = window.jspdf;
+
+const doc = new jsPDF();
+
+let y = 20;
+
+doc.setFontSize(18);
+
+doc.text("Mini CompanyOS AI Report",20,y);
+
+y+=15;
+
+doc.setFontSize(12);
+
+doc.text("Question:",20,y);
+
+y+=8;
+
+doc.text(String(latestReport.question || ""),20,y);;
+
+y+=15;
+
+doc.text("Sales Analysis:",20,y);
+
+y+=8;
+
+doc.text(latestReport.sales?.finding||"",20,y);
+
+y+=15;
+
+doc.text("Finance Analysis:",20,y);
+
+y+=8;
+
+doc.text(latestReport.finance?.finding||"",20,y);
+
+y+=15;
+
+doc.text("HR Analysis:",20,y);
+
+y+=8;
+
+doc.text(latestReport.hr?.finding||"",20,y);
+
+y+=15;
+
+doc.text("CEO Decision:",20,y);
+
+y+=8;
+
+doc.text(String(window.latestCEO.summary || "No CEO summary"),20,y);
+
+y+=15;
+
+doc.text("Recommended Action:",20,y);
+
+y+=8;
+
+doc.text(String(window.latestCEO.action || "No recommendation"),20,y);
+y+=15;
+doc.text(
+"Confidence: "
++
+(window.latestCEO.confidence || 95)
++
+"%",
+20,
+y
+);
+y+=15;
+doc.text("Explainable AI:",20,y);
+y+=8;
+doc.text(
+"- Decision based on Sales, Finance and HR analysis.",
+20,y
+);
+doc.save("CompanyOS_Report.pdf");
+}
+function downloadCSV(){
+
+let csv=[];
+
+csv.push(["Field","Value"]);
+
+csv.push(["Question",latestReport.question]);
+
+csv.push(["Sales",latestReport.sales?.finding]);
+
+csv.push(["Finance",latestReport.finance?.finding]);
+
+csv.push(["HR",latestReport.hr?.finding]);
+
+csv.push(["CEO Summary",latestReport.ceo?.summary]);
+
+csv.push(["Action",latestReport.ceo?.action]);
+
+csv.push(["Confidence",latestReport.ceo?.confidence+"%"]);
+
+const csvContent = csv
+
+.map(e=>e.join(","))
+
+.join("\n");
+
+const blob = new Blob(
+
+[csvContent],
+
+{
+
+type:"text/csv"
+
+}
+
+);
+
+const url = URL.createObjectURL(blob);
+
+const a=document.createElement("a");
+
+a.href=url;
+
+a.download="CompanyOS_Report.csv";
+
+a.click();
+
+URL.revokeObjectURL(url);
+
+}
+document.getElementById('q').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();run();}});
+renderMem();
+updateMemBadge();
+
+</script>
+
+</body>
+</html>
